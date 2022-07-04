@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import {useState} from 'react';
+import Welcome from './Welcome'
+import ProductList from './ProductList.js';
+import Login from './Login';
+import FicheContact from './FicheContact.js';
 
-function App() {
+
+function App(props) {
+
+  let [currentPage, setCurrentPage] = useState("Welcome");
+  let contact = { name: "Jean", tel: "06-12-34-56-78", email: "Jean@shoponline.fr" };
+  let [login, setLogin] = useState("");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {currentPage === 'Welcome' && <Welcome setCurrentPage={setCurrentPage}/>}
+      {currentPage === 'Login' && <Login setCurrentPage={setCurrentPage} setLogin={setLogin}/>}
+      {currentPage === 'ProductList' && <ProductList setCurrentPage={setCurrentPage} login={login}/>}
+      {currentPage === 'Contact' && <FicheContact {...contact} setCurrentPage={setCurrentPage}/>}
     </div>
   );
+
 }
 
 export default App;
