@@ -25,13 +25,28 @@ function ProductView(props) {
             <td width={50} align={'center'}>{props.quantite}</td>
             {/* <td width={50} align={'center'}> <NumberPicker value={props.quantite} /> </td> */}
             <td>
-              <Bouton typeBtn="btn btn-primary" click={()=>{console.log('achat')}}><img src="img/acheter.png" alt="Acheter" width="20"/></Bouton>
+              <Bouton typeBtn="btn btn-primary" click={()=>props.handleAchat(props.idProduct)}><img src="img/acheter.png" alt="Acheter" width="20"/></Bouton>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
   );
+}
+
+
+function AchatProduct(props){
+  fetch(`http://localhost:3050/ajouter-produit/${props.idProduct}`, {
+    method: 'get',
+    credentials: 'include'})
+    .then(response => response.json())  // Convertit le json en objet
+    .then(jsonBackendData => { // jsonBackendData est un tableau d'objets
+      props.setProducts([]); // On met à jour le state
+      console.log(jsonBackendData);
+    })
+    .catch(error => { // Si erreur
+      console.log('Erreur : ' + error); // On affiche l'erreur
+    });
 }
 
 function ProductList(props) {
@@ -58,12 +73,29 @@ function ProductList(props) {
     setAffiche('ProductList');
   }
 
+  function handleLogout() {
+    fetch('http://localhost:3050/logout', {
+      method: 'post',
+      credentials: 'include'})
+      .then(response => response.json())  // Convertit le json en objet
+      .then(jsonBackendData => { // jsonBackendData est un tableau d'objets
+        console.log(jsonBackendData); // On met à jour le state
+      })
+  }
+
+  function handleAchat(props){
+    AchatProduct(props.idProduit);
+    handleClick();
+  }
+
   let monCss = { backgroundImage: `url(${background})`, backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center", height: "100vh"};
   return (
 
     <div style={monCss}>
       <div>
+        <Bouton typeBtn="btn btn-success" click={() => props.setCurrentPage('Panier') }>Voir le panier</Bouton>
         <Bouton typeBtn="btn btn-primary" click={() => props.setCurrentPage('Contact')}>Contactez-nous</Bouton>
+        <Bouton typeBtn="btn btn-danger" click={() => handleLogout}>Déconnexion</Bouton>
       </div>
       <div className="container" style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
         <div className = "row col-9 col-sm-7 offset-md-5">
@@ -79,6 +111,7 @@ function ProductList(props) {
                 quantite={0}
                 setIdProduct={setIdProduct}  
                 setAffiche={setAffiche}
+                handleAchat={handleAchat}
               />
             )}  
           </div>

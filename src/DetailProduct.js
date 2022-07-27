@@ -18,7 +18,7 @@ function ViewDetail(props){
       .catch(error => { // Si erreur
         console.log('Erreur : ' + error); // On affiche l'erreur
       });
-  }, []);
+  }, [props.idProduct]);
   
   let detailCss = `bg-light border border-dark m-2 p-2 rounded text-left text-black height:100vh`;
 
@@ -52,6 +52,7 @@ function DeleteProduct(props){
       console.log('Erreur : ' + error); // On affiche l'erreur
     });
 }
+
 
 function DetailProduct(props) {
   

@@ -132,13 +132,13 @@ app.get('/ajouter-produit/:id', (req, res) => {
   }
 })
 
-app.get('/panier', (req, res) => {
+app.get('/get-panier', (req, res) => {
   let userId = req.cookies.userid
   if(userData[userId] === undefined) {
     res.status(401).send(error);
   } else {
     res.send(`
-      let products={}
+      let products=[]
       ${userData[userId].panier.map(product => 
         db.dbGetDetail(product, (err, result) => {
           if(err) {
@@ -148,6 +148,7 @@ app.get('/panier', (req, res) => {
           }
         }
       )).join('')}
+      console.log(products)
       res.send(products)
     `)
   }
